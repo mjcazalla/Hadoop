@@ -1,0 +1,40 @@
+#probamos que flume está instalado
+$ flume-ng
+
+# creamos nuestro directorio de spool
+$ mkdir /tmp/spooldir
+
+# creamos en nuestro workspace un directorio para flume
+$ mkdir flume
+$ cd flume
+wget http://github.com/curso-iabd-uclm/hadoop/raw/main/flume/flume_agent2.properties
+$ ls
+$ gedit flume_agent2.properties
+
+# Comprobamos que no exista el directorio en hdfs, porque lo va a crear
+$ hdfs dfs -ls /tmp 
+$ hdfs dfs -ls /tmp/flume
+ 
+#Ahora ejecutamos nuestro agente
+$ flume-ng agent --conf ./ -f ./flume_agent2.properties -n agent1 -Dflume.root.logger=DEBUG
+
+#Se queda escuchando en nuestro directorio de spool
+
+#Abrimos otro terminal
+# copiamos los ficheros de log al spooldir y vemos en el terminal que está a la escucha como va procesando lo recibido
+
+$ cp *.log /tmp/spooldir/
+
+# miramos en spooldir como se han procesado
+
+$ ls /tmp/spooldir
+
+# Al hacer -la vemos un directorio oculto del procesamiento del flume
+$ ls -la /tmp/spooldir
+
+# Vemos en el terminal que está a la escucha como está haciendo la escritura en hdfs
+
+$ hdfs dfs -ls /tmp/flume
+# Y las salidas procesadas
+$hdfs dfs -cat /tmp/flume/* | head -100
+
